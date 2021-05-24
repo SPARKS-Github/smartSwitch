@@ -1,11 +1,5 @@
-# import libraries
-from flask import Flask, render_template, request
 import paho.mqtt.client as mqtt
 import time
-
-
-app = Flask(__name__)
-
 
 class pub_mqtt():
     """
@@ -89,23 +83,9 @@ class sub_mqtt():
         print("[INFO] Message Recieved: {}".format(message.payload.decode()))
         print("------------")
 
+        
+obj_publisher = pub_mqtt("protium/switchStatus/led1")
 
 
-@app.route("/", methods=['GET', 'POST'])
-def index():
-    # set default icon color
-    icon_color = "#8a92a5"
-    led1 = request.form.getlist("led1")
-    led2 = request.form.getlist("led2")
-    fan = request.form.getlist("fan")
-    plug1 = request.form.getlist("plug1")
 
-    print(f"Led1: {led1}")
-    print(f"Led2: {led2}")
-    print(f"Fan: {fan}")
-    print(f"Plug1: {plug1}")
 
-    return render_template("index.html")
-
-if __name__ == "__main__":
-    app.run(debug=True)

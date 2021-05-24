@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    // GET is the default method, so we don't need to set it
+    // POST
+    fetch('/hello', {
+    // Declare what type of data we're sending
+    headers: {
+    'Content-Type': 'application/json'
+    },
+
+    // Specify the method
+    method: 'POST',
+
+    // A JSON payload
+    body: JSON.stringify({
+        "greeting": "Hello from the browser!"
+    })
+    }).then(function (response) { // At this point, Flask has printed our JSON
+    return response.text();
+    }).then(function (text) {
+
+    console.log('POST response: ');
+
+    // Should be 'OK' if everything was successful
+    console.log(text);
+    });
+    var intervalId = window.setInterval(function(){
+    // Send the same request
+    fetch('/hello')
+        .then(function (response) {
+            return response.json(); // But parse it as JSON this time
+        })
+        .then(function (json) {
+            console.log('GET response as JSON:');
+            console.log(json); // Here’s our JSON object
+            
+            document.getElementById("led1").innerHTML = json.led1;
+            document.getElementById("led2").innerHTML = json.led2;
+            document.getElementById("fan").innerHTML = json.fan;
+            document.getElementById("plug").innerHTML = json.plug;
+        })
+    }, 5000);
+    
+    
+</script>
+<body>
+    <h1 id="led1">
+        LED1
+    </h1>
+    <h1 id="led2">
+        LED2
+    </h1>
+    <h1 id="fan">
+        FAN
+    </h1>
+    <h1 id="plug">
+        PLUG
+    </h1>
+</body>
