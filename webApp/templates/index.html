@@ -1,163 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PROTIUM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="HandheldFriendly" content="true">
+    <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
-<style>
-
-body
-{
-    
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    background: #121212e1; 
-    font-family: 'Poppins',sans-serif;
-    color: #8a92a5;
-}
-
-.shelf {
-    position: fixed;
-    background: red;
-    width: 100%;
-    height: 25%;
-}
-.container
-{
-    position: absolute;
-    display: flex;
-    bottom: 0px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    width: 100%;
-    background: #121212;
-    height: 85%;
-    border-radius: 80px 80px 0px 0px;
-}
-.container .box1
-{
-    width: 40%;
-    background: #121212b2;
-    align-items: center;
-    align-self: center;
-    margin: 2%; 
-    text-align: center;
-    border-radius: 100px;
- }  
-
-.icon {
-    background: none;
-    transition: transform 0.8s;
-    color: #8a92a5;
-}
-
-
-
-
-
-
-
-.togglebx
-{
-    display: block;
-    background: none;
-    top: -132px;
-    text-align: center;
-    width: 100%;
-}
-
-
-.labelt
- {
-   padding: 50px;
-   background: none;
- } 
-  
-.con
-{
-    position: sticky;
-    height: 35px;
-    width: 75px;
-    border-radius: 50px;
-    overflow: hidden;
-    box-shadow:  -4px -4px 8px #292929, 4px 4px 12px #444343;
-    margin-left: 50px;
-}
-.switch
-{
-    display: none;
-    padding-left: 40px;
-}
-.toggle
-{
-    height: 100%;
-    width: 200%;
-    background: whitesmoke;
-    border-radius: 20px;
-    transition: transform 0.4s cubic-bezier(0.85,0.05,0.18,1.35);
-    transform: translate3d(-75%,0,0);
-    box-shadow: 
-        -4px -4px 8px #1f1f1f,
-        4px 4px 8px  #1b1b1b;
-}
-.switch:checked ~ .toggle
-{
-    transform: translate3d(25%,0,0);
-    background-color: rgb(233, 233, 0);
-}
-
-
-
-</style>    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script src="{{ url_for('static', filename='javascript/index.js') }}"></script>
 </head>
 <body>
-<div class="shelf">  
-</div>
-
-
-<div class="container">
-    <div class="box1">
-        <div>
-            <h2>Bulb 1</h2>
-            <div class="icon">
-                <i class="fas fa-lightbulb fa-8x"></i>
-            </div>
+    <div class="header">
+        <h1>PROTIUM</h1>
+      </div>
+    
+      <div class="row">
+        <div class="column">
+          <div class="card">
+            <i class="fas fa-lightbulb fa-8x" id='led1' onclick="toggle_state('led1')"></i>
+            <h2> LED 1</h2>
+          </div>
+          
         </div>
-    </div> 
-
-    <div class="box1">
-        <div>
-            <h2>Bulb 2</h2>
-            <div class="icon">
-                <i class="fas fa-lightbulb fa-8x"></i>
-            </div>
+        
+        <div class="column">
+          <div class="card">
+            <i class="fas fa-lightbulb fa-8x" id="led2" onclick="toggle_state('led2')"></i>
+            <h2>LED 2</h2>
+          </div>
         </div>
-    </div> 
-
-    <div class="box1">
-        <div>
-            <h2>Fan</h2>
-            <div class="icon">
-                <i class="fas fa-lightbulb fa-8x"></i>
-            </div>
+        
+        <div class="column">
+          <div class="card">
+            <i class="fa fa-thermometer-empty fa-8x" aria-hidden="true" id="fan" onclick="toggle_state('fan')"></i>
+            <h2>FAN</h2>
+          </div>
         </div>
-    </div> 
-    <div class="box1">
-        <div>
-            <h2>Plug 1</h2>
-            <div class="icon">
-                <i class="fas fa-lightbulb fa-8x"></i>
-            </div>
-
+    
+        <div class="column">
+          <div class="card">
+            <i class="fa fa-plug fa-8x" aria-hidden="true" id="plug" onclick="toggle_state('plug')"></i>
+            <h2>CHARGER</h2>
+          </div>
         </div>
-    </div> 
-</div>  
-   
+      </div>
+    
 </body>
 </html>

@@ -1,64 +1,61 @@
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    margin: 0;
 }
 
-ul {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    border-radius: 100px;
+/* Style the header */
+.header {
+    background-color: #f6f6f8;
     padding: 20px;
-    width: 240px;
-    background: #ebf5fc;
-    box-shadow: -2px -2px 5px rgba(255, 255, 255, 1),
-                 3px 3px 5px rgba(0, 0, 0, 0.1);
-    
-}
-
-ul li {
-    position: relative;
-    list-style: none;
     text-align: center;
-    margin: 15px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-ul li label {
-    position: relative;
+.row {
+    background-color: #e3e3e3;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
 }
 
-ul li label input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-
+/* Create three equal columns that floats next to each other */
+.column {
+    float: left;
+    text-align: center;
+    width: 33.33%;
+    padding: 10px;
 }
 
-ul li label .icon-box {
-    width: 60px;
-    height: 60px;
-    background: #ebf5fc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: -2px -2px 5px rgba(255, 255, 255, 1),
-                 3px 3px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 30px;
-    color: #6a9bd8;
-
+.card {
+margin: 2px;
+padding: 5px;
+padding-top: 15px;
+border-radius: 15px;
+box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+transition: 0.3s;
 }
 
-ul li label input[type="checkbox"]:checked ~ .icon-box {
-    box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 1),
-                inset  3px 3px 5px rgba(0, 0, 0, 0.1);
+.card h2{
+font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+color: #c60021;
+}
+
+.card i{
+color: black;
+}
+
+/* Clear floats after the columns */
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width:600px) {
+.column {
+    width: 48%;
+}
 }

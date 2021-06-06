@@ -1,10 +1,22 @@
 # import libraries
-from flask import Flask, render_template, request
+# import libraries
+from flask import Flask, render_template, request, jsonify
 import paho.mqtt.client as mqtt
+import threading as t
 import time
 
 
 app = Flask(__name__)
+
+
+# Global variables
+json = {
+    'led1' : 'OFF',
+    'led2' : 'OFF',
+    'fan' : 'OFF',
+    'plug' : 'OFF'
+}
+
 
 
 class pub_mqtt():
@@ -26,8 +38,6 @@ class pub_mqtt():
         self.pub_client.on_publish = self.callback_on_publish
         self.pub_client.connect(self.broker_url, self.broker_port)
         
-        
-        
     def callback_on_publish(self, client, userdata, mid):
         print("--- Publisher ---")
         print("[INFO] Topic: {}".format(self.pub_topic)) 
@@ -42,7 +52,6 @@ class pub_mqtt():
         self.pub_message = message
         self.pub_client.publish(topic=self.pub_topic, payload=message, qos=0, retain=False)
         time.sleep(1)
-
 
 
 class sub_mqtt():
@@ -80,6 +89,7 @@ class sub_mqtt():
         print("[INFO] Connected With Result Code: " + str(rc))
     
     def callback_on_message(self, client, userdata, message):
+        global json
         """
         Callback function that prints the message published
         on the topic.
@@ -89,23 +99,78 @@ class sub_mqtt():
         print("[INFO] Message Recieved: {}".format(message.payload.decode()))
         print("------------")
 
+        if (self.sub_topic == 'protium/led1/switchStatus') and (json['led1'] != message.payload.decode()):
+            json['led1'] = message.payload.decode()
+        elif (self.sub_topic == 'protium/led2/switchStatus') and (json['led2'] != message.payload.decode()):
+            json['led2'] = message.payload.decode()
+        elif (self.sub_topic == 'protium/fan/switchStatus') and (json['fan'] != message.payload.decode()):
+            json['fan'] = message.payload.decode()
+        elif (self.sub_topic == 'protium/plug/switchStatus') and (json['plug'] != message.payload.decode()):
+            json['plug'] = message.payload.decode()
+
+def establish_connection_led1():
+    obj_sub_led1 = sub_mqtt('protium/led1/switchStatus')
+
+def establish_connection_led2():
+    obj_sub_led2 = sub_mqtt('protium/led2/switchStatus')
+
+def establish_connection_fan():
+    obj_sub_fan = sub_mqtt('protium/fan/switchStatus')
+
+def establish_connection_plug():
+    obj_sub_plug = sub_mqtt('protium/plug/switchStatus')
 
 
-@app.route("/", methods=['GET', 'POST'])
-def index():
-    # set default icon color
-    icon_color = "#8a92a5"
-    led1 = request.form.getlist("led1")
-    led2 = request.form.getlist("led2")
-    fan = request.form.getlist("fan")
-    plug1 = request.form.getlist("plug1")
+@app.route('/control', methods=['GET', 'POST'])
+def control():
+    global json
+    # Communication code here...
+    
+    if request.method == 'GET':
+        return jsonify(json)
+    else:
+        new_state = ""
+        data = request.get_json()  # parse as JSON
+        if json['led1'] != data['led1']:
+            obj_pub_led1 = pub_mqtt('protium/led1/changeStatus')
+            json['led1'] = data['led1']
+            new_state = data['led1']
+            obj_pub_led1.publish_msg(new_state)
+            
+        
+        if json['led2'] != data['led2']:
+            obj_pub_led2 = pub_mqtt('protium/led2/changeStatus')
+            json['led2'] = data['led2']
+            new_state = data['led2']
+            obj_pub_led2.publish_msg(new_state)
+        
+        if json['fan'] != data['fan']:
+            obj_pub_fan = pub_mqtt('protium/fan/changeStatus')
+            json['fan'] = data['fan']
+            new_state = data['fan']
+            obj_pub_led1.publish_msg(new_state)
+        
+        if json['plug'] != data['plug']:
+            obj_pub_plug = pub_mqtt('protium/plug/changeStatus')
+            json['plug'] = data['plug']
+            new_state = data['plug']
+            obj_pub_plug.publish_msg(new_state)
 
-    print(f"Led1: {led1}")
-    print(f"Led2: {led2}")
-    print(f"Fan: {fan}")
-    print(f"Plug1: {plug1}")
+        print(json)
+        return 'OK', 200
 
-    return render_template("index.html")
+@app.route('/protium')
+def protium():
+    thrd1 = t.Thread(target = establish_connection_led1)
+    thrd2 = t.Thread(target = establish_connection_led2)
+    thrd3 = t.Thread(target = establish_connection_fan)
+    thrd4 = t.Thread(target = establish_connection_plug)
+    thrd1.start()
+    thrd2.start()
+    thrd3.start()
+    thrd4.start()
+    # look inside template and serve index.html
+    return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug = True)

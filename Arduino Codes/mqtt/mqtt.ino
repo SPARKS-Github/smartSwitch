@@ -7,7 +7,7 @@ const char* ssid = "ABCDEF";
 const char* password = "9535109631";
 const char* mqtt_server = "broker.mqtt-dashboard.com";
 
-char pub_str[100];
+char pub_str[100] = "ON";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -61,7 +61,10 @@ void reconnect()
   {
     Serial.println("Connected");
     client.publish("protium/switchStatus/led1","Connected!");
-    client.subscribe("protium/changeState/led1");
+    client.subscribe("protium/led1/changeStatus");
+    client.subscribe("protium/led2/changeStatus");
+    client.subscribe("protium/fan/changeStatus");
+    client.subscribe("protium/plug/changeStatus");
     Serial.print("subscribed!");
   }
   else
